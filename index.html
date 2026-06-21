@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planix - Task & Routine Manager</title>
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       PROFESSIONAL DESIGN SYSTEM
+       ═══════════════════════════════════════════════════════════ */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ─── TYPOGRAPHY & BASE ───────────────────────────────── */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background-color: #0f172a;
+      color: #111827;
+      line-height: 1.5;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* ─── NAVBAR ──────────────────────────────────────────── */
+    .navbar {
+      background-color: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar-brand {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(255, 214, 0, 0.3);
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-brand .brand-word {
+      color: #111827;
+      font-weight: 800;
+    }
+
+    .navbar-brand .brand-highlight {
+      color: #FFD600;
+      font-weight: 900;
+      text-shadow: 0 2px 6px rgba(255, 214, 0, 0.4);
+    }
+
+    .navbar-nav {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .navbar-nav a {
+      text-decoration: none;
+      color: #6b7280;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .navbar-nav a:hover {
+      color: #111827;
+      background-color: #f3f4f6;
+    }
+
+    .navbar-nav a.active {
+      color: #FFD600;
+      background-color: #fffbeb;
+    }
+
+    /* ─── MAIN CONTENT ────────────────────────────────────── */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      background-color: #f9fafb;
+      padding: 40px 24px;
+    }
+
+    .content {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* ─── PAGE HEADER ─────────────────────────────────────── */
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    /* ─── CARD & CONTAINER ────────────────────────────────── */
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      padding: 24px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    /* ─── FORM ELEMENTS ───────────────────────────────────── */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input[type="text"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      background-color: white;
+      color: #111827;
+      transition: all 0.15s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="time"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #FFD600;
+      box-shadow: 0 0 0 2px rgba(255, 214, 0, 0.1);
+    }
+
+    input[type="text"]::placeholder,
+    textarea::placeholder {
+      color: #9ca3af;
+    }
+
+    /* ─── BUTTONS ─────────────────────────────────────────── */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .button-primary {
+      background-color: #111827;
+      color: white;
+    }
+
+    .button-primary:hover:not(:disabled) {
+      background-color: #1f2937;
+    }
+
+    .button-secondary {
+      background-color: transparent;
+      color: #111827;
+      border: 1px solid #d1d5db;
+    }
+
+    .button-secondary:hover:not(:disabled) {
+      background-color: #f9fafb;
+      border-color: #9ca3af;
+    }
+
+    .button-danger {
+      background-color: transparent;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+
+    .button-danger:hover:not(:disabled) {
+      background-color: #fef2f2;
+      border-color: #dc2626;
+    }
+
+    .button-yellow {
+      background-color: #FFD600;
+      color: #111827;
+    }
+
+    .button-yellow:hover:not(:disabled) {
+      background-color: #f4d400;
+    }
+
+    /* ─── INPUT GROUP ─────────────────────────────────────── */
+    .input-group {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .input-group input,
+    .input-group select {
+      flex: 1;
+    }
+
+    .input-group .button {
+      flex-shrink: 0;
+      padding: 10px 20px;
+    }
+
+    /* ─── TASK ITEM ───────────────────────────────────────── */
+    .task-item,
+    .routine-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background-color: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      transition: all 0.15s ease;
+    }
+
+    .task-item:hover,
+    .routine-item:hover {
+      border-color: #d1d5db;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    }
+
+    .task-item.completed {
+      opacity: 0.6;
+      background-color: #f9fafb;
+    }
+
+    .task-item.completed .task-title {
+      text-decoration: line-through;
+      color: #9ca3af;
+    }
+
+    /* ─── CHECKBOX ────────────────────────────────────────── */
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #d1d5db;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      background-color: white;
+      transition: all 0.15s ease;
+    }
+
+    .checkbox:hover {
+      border-color: #9ca3af;
+    }
+
+    .checkbox.checked {
+      background-color: #111827;
+      border-color: #111827;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .checkbox.checked::after {
+      content: '✓';
+    }
+
+    /* ─── TASK CONTENT ────────────────────────────────────── */
+    .task-body,
+    .routine-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .task-title,
+    .routine-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: #111827;
+      margin-bottom: 8px;
+      word-break: break-word;
+    }
+
+    .task-meta,
+    .routine-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* ─── BADGE ───────────────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge-priority {
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-high {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge-medium {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-low {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-category {
+      background-color: #e5e7eb;
+      color: #374151;
+    }
+
+    .badge-streak {
+      background-color: #fff8e1;
+      color: #b8860b;
+      font-weight: 700;
+    }
+
+    .badge-time {
+      background-color: #eff6ff;
+      color: #1e40af;
+      font-weight: 600;
+    }
+
+    /* ─── TASK ACTIONS ────────────────────────────────────── */
+    .task-actions,
+    .routine-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .task-actions button,
+    .routine-actions button {
+      padding: 6px 10px;
+      font-size: 12px;
+      border: 1px solid #d1d5db;
+      background-color: white;
+      color: #374151;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .task-actions button:hover,
+    .routine-actions button:hover {
+      background-color: #f9fafb;
+      border-color: #9ca3af;
+    }
+
+    .task-actions .delete:hover,
+    .routine-actions .delete:hover {
+      background-color: #fef2f2;
+      border-color: #fca5a5;
+      color: #dc2626;
+    }
+
+    /* ─── TASK LIST ───────────────────────────────────────── */
+    .task-list,
+    .routine-list {
+      margin-bottom: 24px;
+    }
+
+    /* ─── SECTION HEADER ──────────────────────────────────── */
+    .section-header {
+      font-size: 13px;
+      font-weight: 700;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .section-header:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    /* ─── EMPTY STATE ─────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 24px;
+      color: #9ca3af;
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .empty-state-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+
+    .empty-state-text {
+      font-size: 14px;
+      color: #9ca3af;
+    }
+
+    /* ─── LOADING STATE ───────────────────────────────────── */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #e5e7eb;
+      border-top-color: #111827;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ─── STATS GRID ──────────────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background-color: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #6b7280;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── AI PARSE SECTION ────────────────────────────────── */
+    .parse-section {
+      margin-bottom: 24px;
+      border: 1px dashed #d1d5db;
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: white;
+    }
+
+    .parse-header {
+      padding: 16px;
+      background-color: #f9fafb;
+      border-bottom: 1px dashed #d1d5db;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .parse-header:hover {
+      background-color: #f3f4f6;
+    }
+
+    .parse-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .parse-toggle {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .parse-body {
+      display: none;
+      padding: 16px;
+    }
+
+    .parse-body.open {
+      display: block;
+    }
+
+    .parse-body textarea {
+      width: 100%;
+      margin-bottom: 12px;
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .parse-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .parse-preview {
+      margin-top: 12px;
+    }
+
+    .parse-preview-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background-color: #f9fafb;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .parse-preview-item-title {
+      font-weight: 500;
+      color: #111827;
+    }
+
+    .parse-preview-item-meta {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .source-badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background-color: #d1fae5;
+      color: #065f46;
+      font-weight: 700;
+      margin-left: 6px;
+    }
+
+    /* ─── ROUTINE CONFIG ──────────────────────────────────── */
+    .routine-config {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .routine-config-item label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .routine-config-item input,
+    .routine-config-item select {
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .main {
+        padding: 24px 16px;
+      }
+
+      .navbar {
+        padding: 12px 16px;
+      }
+
+      .navbar-nav {
+        gap: 16px;
+      }
+
+      .page-title {
+        font-size: 24px;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .input-group {
+        flex-direction: column;
+      }
+
+      .input-group .button {
+        width: 100%;
+      }
+
+      .routine-config {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <!-- ─── NAVBAR ───────────────────────────────────────────── -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span class="brand-word">Plan</span><span class="brand-highlight">ix</span>
+    </div>
+    <ul class="navbar-nav">
+      <li><a href="#" onclick="switchPage('tasks')" class="nav-link active" data-page="tasks">Tasks</a></li>
+      <li><a href="#" onclick="switchPage('routines')" class="nav-link" data-page="routines">Routines</a></li>
+    </ul>
+  </nav>
+
+  <!-- ─── MAIN CONTENT ───────────────────────────────────── -->
+  <div class="main">
+    <div class="content">
+
+      <!-- ═══════════════════════════════════════════════════════
+           PAGE: TASKS
+           ═══════════════════════════════════════════════════════ -->
+      <div id="tasks-page" class="page active">
+        <div class="page-header">
+          <h1 class="page-title">Tasks</h1>
+          <p class="page-subtitle">Create and manage your one-time tasks</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="stat-total">0</div>
+            <div class="stat-label">Total</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-pending">0</div>
+            <div class="stat-label">Pending</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-completed">0</div>
+            <div class="stat-label">Completed</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-high">0</div>
+            <div class="stat-label">High Priority</div>
+          </div>
+        </div>
+
+        <!-- Add Task Form -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="form-group">
+            <label>Task Title</label>
+            <input type="text" id="task-input" placeholder="What needs to be done?" />
+          </div>
+
+          <div class="input-group">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>Priority</label>
+              <select id="priority-select">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div style="display: flex; align-items: flex-end;">
+              <button class="button button-primary" onclick="addTask()" style="margin-bottom: 0;">
+                Add Task
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task List -->
+        <div id="tasks-list" class="task-list"></div>
+
+        <!-- Empty State -->
+        <div id="tasks-empty" class="empty-state" style="display: none;">
+          <div class="empty-state-title">No tasks yet</div>
+          <div class="empty-state-text">Create a task to get started</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           PAGE: ROUTINES
+           ═══════════════════════════════════════════════════════ -->
+      <div id="routines-page" class="page">
+        <div class="page-header">
+          <h1 class="page-title">Routines</h1>
+          <p class="page-subtitle">Set up recurring routines and track your streaks</p>
+        </div>
+
+        <!-- Add Routine Form -->
+        <div class="card" style="margin-bottom: 24px;">
+          <h3 style="font-size: 16px; font-weight: 600; color: #111827; margin-bottom: 16px;">Create Routine</h3>
+
+          <div class="form-group">
+            <label>Routine Title</label>
+            <input type="text" id="routine-input" placeholder="e.g. Morning workout" />
+          </div>
+
+          <div class="routine-config">
+            <div class="routine-config-item">
+              <label>Time</label>
+              <input type="time" id="routine-time" value="07:00" />
+            </div>
+            <div class="routine-config-item">
+              <label>Repeat</label>
+              <select id="routine-repeat">
+                <option value="daily" selected>Every day</option>
+                <option value="monday">Monday</option>
+                <option value="tuesday">Tuesday</option>
+                <option value="wednesday">Wednesday</option>
+                <option value="thursday">Thursday</option>
+                <option value="friday">Friday</option>
+                <option value="saturday">Saturday</option>
+                <option value="sunday">Sunday</option>
+              </select>
+            </div>
+            <div class="routine-config-item">
+              <label>Priority</label>
+              <select id="routine-priority">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="button button-primary" onclick="addRoutine()">Create Routine</button>
+        </div>
+
+        <!-- AI Parse Section -->
+        <div class="parse-section">
+          <div class="parse-header" onclick="toggleParsePanel()">
+            <span class="parse-title">AI Routine Builder - Parse your schedule</span>
+            <span class="parse-toggle" id="parse-arrow">▼</span>
+          </div>
+          <div class="parse-body" id="parse-body">
+            <div class="form-group">
+              <textarea id="parse-input" placeholder="e.g. Morning I go to college at 7, evening 4:30 I come back, then I study"></textarea>
+            </div>
+            <div class="parse-actions">
+              <button class="button button-primary" onclick="parseRoutine()">Parse Schedule</button>
+              <button class="button button-secondary" onclick="clearParse()">Clear</button>
+            </div>
+            <div id="parse-preview" class="parse-preview"></div>
+          </div>
+        </div>
+
+        <!-- Routine List -->
+        <h2 class="section-header">Your Routines</h2>
+        <div id="routines-list" class="routine-list"></div>
+
+        <!-- Empty State -->
+        <div id="routines-empty" class="empty-state" style="display: none;">
+          <div class="empty-state-title">No routines yet</div>
+          <div class="empty-state-text">Create a routine to start tracking your habits</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  let parsedRoutines = [];
+
+  // ═══════════════════════════════════════════════════════════
+  // LOCALSTORAGE HELPERS
+  // ═══════════════════════════════════════════════════════════
+  function generateId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  }
+
+  function getAllTasks() {
+    try {
+      return JSON.parse(localStorage.getItem('planix_tasks')) || [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveTasks(tasks) {
+    localStorage.setItem('planix_tasks', JSON.stringify(tasks));
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // PAGE NAVIGATION
+  // ═══════════════════════════════════════════════════════════
+  function switchPage(pageName) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+    // Show selected page
+    document.getElementById(pageName + '-page').classList.add('active');
+
+    // Update nav
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.toggle('active', link.dataset.page === pageName);
+    });
+
+    // Load data
+    if (pageName === 'tasks') {
+      loadTasks();
+    } else if (pageName === 'routines') {
+      loadRoutines();
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // TASK MANAGEMENT
+  // ═══════════════════════════════════════════════════════════
+
+  function loadTasks() {
+    try {
+      const allTasks = getAllTasks();
+      const tasks = allTasks.filter(t => t.type === 'task' || !t.type);
+      renderTasks(tasks);
+      updateTaskStats(tasks);
+    } catch (err) {
+      console.error('Failed to load tasks:', err);
+    }
+  }
+
+  function addTask() {
+    const input = document.getElementById('task-input');
+    const priority = document.getElementById('priority-select').value;
+    const text = input.value.trim();
+
+    if (!text) {
+      alert('Please enter a task');
+      return;
+    }
+
+    try {
+      const tasks = getAllTasks();
+      tasks.push({
+        id: generateId(),
+        text,
+        priority,
+        type: 'task',
+        completed: false,
+        createdAt: new Date().toISOString(),
+      });
+      saveTasks(tasks);
+      input.value = '';
+      loadTasks();
+    } catch (err) {
+      alert('Error adding task: ' + err.message);
+    }
+  }
+
+  function deleteTask(id) {
+    if (!confirm('Delete this task?')) return;
+
+    try {
+      const tasks = getAllTasks();
+      const updated = tasks.filter(t => t.id !== id);
+      saveTasks(updated);
+      loadTasks();
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  }
+
+  function toggleTask(id, completed) {
+    try {
+      const tasks = getAllTasks();
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.completed = !task.completed;
+        saveTasks(tasks);
+        loadTasks();
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  }
+
+  function renderTasks(tasks) {
+    const list = document.getElementById('tasks-list');
+    const empty = document.getElementById('tasks-empty');
+
+    if (!tasks || tasks.length === 0) {
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+
+    empty.style.display = 'none';
+
+    list.innerHTML = tasks
+      .map(task => {
+        const priorityClass = task.priority || 'medium';
+        return `
+          <div class="task-item ${task.completed ? 'completed' : ''}">
+            <div class="checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask('${task.id}', ${task.completed})"></div>
+            <div class="task-body">
+              <div class="task-title">${escapeHtml(task.text)}</div>
+              <div class="task-meta">
+                <span class="badge badge-priority badge-${priorityClass}">${priorityClass}</span>
+                <span class="badge badge-category">${task.category || 'general'}</span>
+              </div>
+            </div>
+            <div class="task-actions">
+              <button onclick="deleteTask('${task.id}')">Delete</button>
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+  }
+
+  function updateTaskStats(tasks) {
+    const completed = tasks.filter(t => t.completed).length;
+    const pending = tasks.length - completed;
+    const highPriority = tasks.filter(t => t.priority === 'high' && !t.completed).length;
+
+    document.getElementById('stat-total').textContent = tasks.length;
+    document.getElementById('stat-pending').textContent = pending;
+    document.getElementById('stat-completed').textContent = completed;
+    document.getElementById('stat-high').textContent = highPriority;
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // ROUTINE MANAGEMENT
+  // ═══════════════════════════════════════════════════════════
+
+  function loadRoutines() {
+    try {
+      const allTasks = getAllTasks();
+      const routines = allTasks.filter(t => t.type === 'routine');
+      renderRoutines(routines);
+    } catch (err) {
+      console.error('Failed to load routines:', err);
+    }
+  }
+
+  function addRoutine() {
+    const input = document.getElementById('routine-input');
+    const time = document.getElementById('routine-time').value;
+    const repeat = document.getElementById('routine-repeat').value;
+    const priority = document.getElementById('routine-priority').value;
+    const text = input.value.trim();
+
+    if (!text) {
+      alert('Please enter a routine title');
+      return;
+    }
+
+    try {
+      const tasks = getAllTasks();
+      tasks.push({
+        id: generateId(),
+        text,
+        priority,
+        type: 'routine',
+        routineConfig: { time, repeat: [repeat], autoGenerated: false },
+        completed: false,
+        streak: 0,
+        createdAt: new Date().toISOString(),
+      });
+      saveTasks(tasks);
+      input.value = '';
+      loadRoutines();
+    } catch (err) {
+      alert('Error adding routine: ' + err.message);
+    }
+  }
+
+  function deleteRoutine(id) {
+    if (!confirm('Delete this routine?')) return;
+
+    try {
+      const tasks = getAllTasks();
+      const updated = tasks.filter(t => t.id !== id);
+      saveTasks(updated);
+      loadRoutines();
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  }
+
+  function toggleRoutine(id, completed) {
+    try {
+      const tasks = getAllTasks();
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.completed = !task.completed;
+        saveTasks(tasks);
+        loadRoutines();
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  }
+
+  function renderRoutines(routines) {
+    const list = document.getElementById('routines-list');
+    const empty = document.getElementById('routines-empty');
+
+    if (!routines || routines.length === 0) {
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+
+    empty.style.display = 'none';
+
+    // Sort by time
+    const sorted = [...routines].sort((a, b) => {
+      const aTime = a.routineConfig?.time || '99:99';
+      const bTime = b.routineConfig?.time || '99:99';
+      return aTime.localeCompare(bTime);
+    });
+
+    list.innerHTML = sorted
+      .map(routine => {
+        const priorityClass = routine.priority || 'medium';
+        const timeBadge = routine.routineConfig?.time
+          ? `<span class="badge badge-time">${routine.routineConfig.time}</span>`
+          : '';
+        const streakBadge = routine.streak > 0
+          ? `<span class="badge badge-streak">Fire ${routine.streak} days</span>`
+          : '';
+
+        return `
+          <div class="routine-item ${routine.completed ? 'completed' : ''}">
+            <div class="checkbox ${routine.completed ? 'checked' : ''}" onclick="toggleRoutine('${routine.id}', ${routine.completed})"></div>
+            <div class="routine-body">
+              <div class="routine-title">${escapeHtml(routine.text)}</div>
+              <div class="routine-meta">
+                <span class="badge badge-priority badge-${priorityClass}">${priorityClass}</span>
+                ${timeBadge}
+                ${streakBadge}
+              </div>
+            </div>
+            <div class="routine-actions">
+              <button onclick="deleteRoutine('${routine.id}')">Delete</button>
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // AI PARSE
+  // ═══════════════════════════════════════════════════════════
+
+  function toggleParsePanel() {
+    const body = document.getElementById('parse-body');
+    const arrow = document.getElementById('parse-arrow');
+    const open = body.classList.toggle('open');
+    arrow.textContent = open ? '▲' : '▼';
+  }
+
+  function parseRoutine() {
+    const text = document.getElementById('parse-input').value.trim();
+    if (!text) {
+      alert('Please describe your routine');
+      return;
+    }
+
+    const preview = document.getElementById('parse-preview');
+    preview.innerHTML = '<div style="color: #6b7280; font-size: 13px;">Parsing...</div>';
+
+    try {
+      // Simple regex-based routine parsing
+      parsedRoutines = parseRoutineText(text);
+
+      if (!parsedRoutines.length) {
+        preview.innerHTML = '<div style="color: #dc2626; font-size: 13px;">Could not parse routines. Try rephrasing.</div>';
+        return;
+      }
+
+      const srcLabel = '<span class="source-badge">Regex Parser</span>';
+
+      preview.innerHTML = `
+        <div style="margin-bottom: 12px; color: #6b7280; font-size: 13px;">
+          Found <strong>${parsedRoutines.length}</strong> routine(s) ${srcLabel}
+        </div>
+        ${parsedRoutines
+          .map((r, i) => `
+            <div class="parse-preview-item">
+              <div class="parse-preview-item-title">${escapeHtml(r.text)}</div>
+              <div class="parse-preview-item-meta">
+                ${r.routineConfig?.time ? r.routineConfig.time : 'no time'} · ${r.category || 'general'}
+              </div>
+            </div>
+          `)
+          .join('')}
+        <button class="button button-yellow" onclick="confirmRoutines()" style="width: 100%; margin-top: 12px;">
+          Add All ${parsedRoutines.length} Routine(s)
+        </button>
+      `;
+    } catch (err) {
+      preview.innerHTML = `<div style="color: #dc2626; font-size: 13px;">Error: ${err.message}</div>`;
+    }
+  }
+
+  function confirmRoutines() {
+    if (!parsedRoutines.length) return;
+
+    try {
+      const tasks = getAllTasks();
+      parsedRoutines.forEach(r => {
+        tasks.push({
+          id: generateId(),
+          text: r.text,
+          priority: 'medium',
+          type: 'routine',
+          routineConfig: r.routineConfig || { time: '', repeat: ['daily'], autoGenerated: true },
+          completed: false,
+          streak: 0,
+          createdAt: new Date().toISOString(),
+        });
+      });
+      saveTasks(tasks);
+      clearParse();
+      document.getElementById('parse-body').classList.remove('open');
+      loadRoutines();
+    } catch (err) {
+      alert('Error adding routines: ' + err.message);
+    }
+  }
+
+  function parseRoutineText(text) {
+    // Simple regex-based parser for routine extraction
+    const routines = [];
+    const lines = text.split(/[\n,;]/).map(l => l.trim()).filter(l => l);
+    
+    lines.forEach(line => {
+      if (line.length > 3) {
+        const timeMatch = line.match(/(\d{1,2}(?::\d{2})?(?:\s*(?:am|pm|AM|PM))?)/i);
+        const time = timeMatch ? timeMatch[1] : '';
+        const cleanText = line.replace(/\d{1,2}(?::\d{2})?(?:\s*(?:am|pm|AM|PM))?/gi, '').trim();
+        
+        if (cleanText.length > 2) {
+          routines.push({
+            id: generateId(),
+            text: cleanText,
+            routineConfig: { time: time || '', repeat: ['daily'], autoGenerated: true },
+            category: 'general'
+          });
+        }
+      }
+    });
+    
+    return routines;
+  }
+
+  function clearParse() {
+    parsedRoutines = [];
+    document.getElementById('parse-input').value = '';
+    document.getElementById('parse-preview').innerHTML = '';
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // HELPERS
+  // ═══════════════════════════════════════════════════════════
+
+  function escapeHtml(text) {
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+    return text.replace(/[&<>"']/g, m => map[m]);
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // INIT
+  // ═══════════════════════════════════════════════════════════
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('task-input').addEventListener('keypress', e => {
+      if (e.key === 'Enter') addTask();
+    });
+
+    document.getElementById('routine-input').addEventListener('keypress', e => {
+      if (e.key === 'Enter') addRoutine();
+    });
+
+    loadTasks();
+  });
+</script>
+
+</body>
+</html>
